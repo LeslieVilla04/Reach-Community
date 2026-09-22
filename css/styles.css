@@ -530,3 +530,28 @@
     font-size: 14px;
     padding: 20px 0;
   }
+
+  .resource-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .save-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--line);
+    padding: 0;
+  }
+  
+  .save-btn:hover {
+    color: var(--ochre, #AD8A46);
+  }
+  
+  .save-btn.save-active {
+    color: #C9A227;
+  }

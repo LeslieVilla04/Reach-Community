@@ -26,7 +26,12 @@ const TRANSLATIONS = {
       matchesFound: (labels) => `You mentioned needing help with: ${labels}.`,
       urgentLabel: "Need help right now?",
       searchPlaceholder: "Search resources...",
-      noResults: "No resources match your search."
+      noResults: "No resources match your search.",
+      navSaved: "Saved",
+      savedTitle: "Saved resources",
+      savedSub: "Resources you've bookmarked. Saved on this device only.",
+      savedEmpty: "You haven't saved anything yet. Tap the star on any resource to save it here."
+
     },
     es: {
       docTitle: "Reach Community - Encuentra ayuda cerca de ti",
@@ -50,7 +55,11 @@ const TRANSLATIONS = {
       matchesFound: (labels) => `Mencionaste que necesitas ayuda con: ${labels}.`,
       urgentLabel: "¿Necesitas ayuda ahora mismo?",
       searchPlaceholder: "Buscar recursos...",
-      noResults: "No hay recursos que coincidan con tu búsqueda."
+      noResults: "No hay recursos que coincidan con tu búsqueda.",
+      navSaved: "Guardados",
+      savedTitle: "Recursos guardados",
+      savedSub: "Recursos que has guardado. Solo se guardan en este dispositivo.",
+      savedEmpty: "Aún no has guardado nada. Toca la estrella en cualquier recurso para guardarlo aquí."
 
     }
   };
@@ -229,6 +238,50 @@ const URGENT_RESOURCES = [
     },
   ];
 
+  // ============================================================
+// SAVED RESOURCES
+// ============================================================
+
+function loadSavedIds() {
+    try {
+      const raw = localStorage.getItem("reachcommunity_saved");
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  
+  function persistSavedIds() {
+    try {
+      localStorage.setItem("reachcommunity_saved", JSON.stringify(savedIds));
+    } catch (e) {
+      // storage unavailable — fail quietly, saving just won't persist
+    }
+  }
+  
+  let savedIds = loadSavedIds();
+  
+  function toggleSaved(id) {
+    if (savedIds.includes(id)) {
+      savedIds = savedIds.filter(savedId => savedId !== id);
+    } else {
+      savedIds.push(id);
+    }
+    persistSavedIds();
+  }
+
+  function bindSaveButtons(container) {
+    container.querySelectorAll(".save-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        toggleSaved(btn.dataset.id);
+        renderDirectoryList();
+        renderSavedList();
+        if (currentQuestion >= QUESTIONS.length) {
+          updateResultsView();
+        }
+      });
+    });
+  }
 
   // ============================================================
 // URGENT BAR
@@ -400,6 +453,7 @@ function setLanguage(lang) {
     renderDirectoryFilters();
     renderDirectoryList();
     renderUrgentList();
+    renderSavedList();
   
     if (currentQuestion >= QUESTIONS.length) {
       updateResultsView();
@@ -413,10 +467,14 @@ function setLanguage(lang) {
 function resourceCardHTML(resource) {
     const categoryLabel = CATEGORIES[resource.category].label[currentLang];
     const description = resource.description[currentLang];
+    const isSaved = savedIds.includes(resource.id);
   
     return `
       <div class="resource-card">
-        <span class="resource-tag">${categoryLabel}</span>
+        <div class="resource-card-head">
+          <span class="resource-tag">${categoryLabel}</span>
+          <button class="save-btn ${isSaved ? "save-active" : ""}" data-id="${resource.id}" aria-label="Save">★</button>
+        </div>
         <h3 class="resource-name">${resource.name}</h3>
         <p class="resource-desc">${description}</p>
         <p class="resource-contact">${resource.contact}</p>
@@ -437,6 +495,7 @@ function resourceCardHTML(resource) {
     }
   
     document.getElementById("resultsList").innerHTML = matches.map(resourceCardHTML).join("");
+    bindSaveButtons(document.getElementById("resultsList"));
   }
   
   function showResults() {
@@ -500,6 +559,23 @@ function renderDirectoryFilters() {
     listEl.innerHTML = visible.length > 0
       ? visible.map(resourceCardHTML).join("")
       : `<p class="no-results">${TRANSLATIONS[currentLang].noResults}</p>`;
+
+      listEl.innerHTML = visible.length > 0
+      ? visible.map(resourceCardHTML).join("")
+      : `<p class="no-results">${TRANSLATIONS[currentLang].noResults}</p>`;
+
+      bindSaveButtons(listEl);
+  }
+
+  function renderSavedList() {
+    const listEl = document.getElementById("savedList");
+    const saved = RESOURCES.filter(r => savedIds.includes(r.id));
+  
+    listEl.innerHTML = saved.length > 0
+      ? saved.map(resourceCardHTML).join("")
+      : `<p class="no-results">${TRANSLATIONS[currentLang].savedEmpty}</p>`;
+  
+    bindSaveButtons(listEl);
   }
 
 
@@ -538,6 +614,7 @@ function init() {
     renderDirectoryFilters();
     renderDirectoryList();
     renderUrgentList();
+    renderSavedList();
   
     document.getElementById("openCheckinBtn").addEventListener("click", openCheckin);
     document.getElementById("openCheckinNavBtn").addEventListener("click", openCheckin);

@@ -24,7 +24,9 @@
               <nav class="header-nav">
                   <button class="nav-link-btn" id="openCheckinNavBtn" data-i18n="navCheckin">Check in</button>
                   <a href="#directory" data-i18n="navBrowse">Browse all resources</a>
+                  <a href="#saved" data-i18n="navSaved">Saved</a>
               </nav>
+              
               <div class="lang-toggle" id="langToggle">
                   <button class="lang-btn lang-active" data-lang="en">EN</button>
                   <button class="lang-btn" data-lang="es">ES</button>
@@ -83,6 +85,16 @@
                 <!-- filled in by JS -->
               </div>
             </section>
+
+            <section class="saved-section wrap" id="saved">
+                <div class="section-head">
+                  <h2 data-i18n="savedTitle">Saved resources</h2>
+                  <p class="section-sub" data-i18n="savedSub">Resources you've bookmarked. Saved on this device only.</p>
+                </div>
+                <div class="saved-list" id="savedList">
+                  <!-- filled in by JS -->
+                </div>
+              </section>
             
          </main>
 

@@ -7,6 +7,17 @@
 <link rel="stylesheet" href="css/styles.css">
 </head>
 
+<div class="modal-scrim" id="checkinScrim"></div>
+<div class="modal" id="checkinModal">
+  <div class="modal-head">
+    <h2>Quick check-in</h2>
+    <button class="modal-close" id="checkinClose" aria-label="Close">×</button>
+  </div>
+  <p class="step-indicator" id="stepIndicator">Question 1 of 5</p>
+  <div class="checkin-card" id="checkinCard">
+    <!-- filled in by JS -->
+  </div>
+</div>
 
 <body>
 
@@ -14,25 +25,47 @@
         <div class="wrap header-row">
             <a class="logo" href="#top">Reach Community</a>
             <nav class="header-nav">
-                <a href="#checkin">Check in</a>
+                <button class="nav-link-btn" id="openCheckinNavBtn">Check in</button>
                 <a href="#directory">Browse all resources</a>
             </nav>
             <a class="emergency-link" href="tel:211"> Call 211</a>
-        </div>
-    </header>
-
-    <main id="top">
-
-        <section class="hero wrap">
-            <h1>Find help near you, no forms or account needed.</h1>
-            <p class="hero-sub">
-                Answer a few short questions about what you're dealing with right now. We'll point you to real, local, free or low cost resources.
-            </p>
-            <a href="#checkin" class = "btn btn-primary">Start the check-in</a>
-        </section>
-
-
-    </main>
+            </div>
+            </header>
+            
+            <main id="top">
+            
+            <section class="hero wrap">
+                <h1>Find help near you, no forms or account needed.</h1>
+                <p class="hero-sub">
+                    Answer a few short questions about what you're dealing with right now. We'll point you to real, local, free or low cost resources.
+                </p>
+                <button class="btn btn-primary" id="openCheckinBtn">Start the check-in</button>
+            </section>
+            
+            <section class="results-section wrap" id="results" hidden>
+              <div class="section-head">
+                <h2>Resources that match what you shared</h2>
+                <p class="section-sub" id="resultsSummary"></p>
+              </div>
+              <div class="results-list" id="resultsList">
+                <!-- filled in by JS -->
+              </div>
+            </section>
+            
+            <section class="directory-section wrap" id="directory">
+              <div class="section-head">
+                <h2>Browse everything</h2>
+                <p class="section-sub">No quiz required — every resource, grouped by category.</p>
+              </div>
+              <div class="directory-filters" id="directoryFilters">
+                <!-- filled in by JS -->
+              </div>
+              <div class="directory-list" id="directoryList">
+                <!-- filled in by JS -->
+              </div>
+            </section>
+            
+         </main>
 
     <footer class="site-footer">
         <div class="wrap footer-row">
@@ -43,6 +76,6 @@
 
 
 
-
+    <script src="js/app.js"></script>
 </body>
 </html>

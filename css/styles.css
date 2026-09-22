@@ -1,0 +1,149 @@
+:root {
+    --bg: #F5F3EE;
+    --ink: #1D2B27;
+    --ink-soft: #5C6B63;
+    --primary: #2F5D50;
+    --primary-dark: #23473D;
+    --urgent: #B4482E;
+    --surface: #FFFFFF;
+    --line: #D8D3C6;
+    --radius: 8px;
+    box-sizing: border-box;
+  }
+
+  * {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .site-header {
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+  }
+  
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .logo {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  
+  .header-nav {
+    display: flex;
+    gap: 24px;
+  }
+  
+  .header-nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 14px;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+  }
+  
+  .header-nav a:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  
+  .emergency-link {
+    background: var(--urgent);
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 999px;
+  }
+  
+  .btn {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px 22px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+  }
+  
+  .btn-primary:hover {
+    background: var(--primary-dark);
+  }
+  
+  .btn-quiet {
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    margin-top: 20px;
+  }
+
+  h1, h2 {
+    line-height: 1.2;
+    font-weight: 600;
+  }
+  
+  section {
+    padding: 48px 0;
+  }
+  
+  .hero {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+  
+  .hero h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    max-width: 16ch;
+  }
+  
+  .hero-sub {
+    margin-top: 16px;
+    max-width: 52ch;
+    color: var(--ink-soft);
+    font-size: 16px;
+  }
+  
+  .hero .btn {
+    margin-top: 24px;
+  }
+  
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding: 24px 0 40px;
+  }
+  
+  .footer-row p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    max-width: 64ch;
+  }

@@ -1,6 +1,6 @@
 *Reach Community*
 
-Reach Community is a fast, accessible, web-based platform designed to connect individuals with essential local, free, or low-cost community resources—without requiring account creation, login credentials, or burdensome forms.
+Reach Community is a fast, accessible, web-based platform designed to connect individuals with essential local, free, or low-cost community resources,without requiring account creation, login credentials, or burdensome forms.
 Whether individuals need immediate assistance with food, housing, healthcare, or childcare, Reach Community provides a direct path to vetted local support.
 Disclaimer: This project is an independent demo platform and is not officially affiliated with LA County or 211 services.
 

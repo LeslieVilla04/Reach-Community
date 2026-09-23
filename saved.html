@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="savedTitle">Saved resources — Reach Community</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="wrap-wide header-row">
+            <a class="logo" href="index.html">
+                <img src="assets/teamwork.png" alt="" class="logo-icon">
+                Reach Community
+              </a>
+            <div class="header-actions">
+              <nav class="header-nav">
+                  <a href="index.html#checkin" data-i18n="navCheckin">Check in</a>
+                  <a href="index.html#directory" data-i18n="navBrowse">Browse all resources</a>
+                  <a href="index.html#map" data-i18n="navMap">Map</a>
+              </nav>
+              <div class="lang-toggle" id="langToggle">
+                  <button class="lang-btn lang-active" data-lang="en">EN</button>
+                  <button class="lang-btn" data-lang="es">ES</button>
+                </div>
+              <a class="emergency-link" href="tel:211" data-i18n="call211"> Call 211</a>
+            </div>
+            </div>
+     </header>
+
+     <div class="urgent-bar">
+        <button class="urgent-toggle" id="urgentToggle">
+          <span data-i18n="urgentLabel">Need help right now?</span>
+          <span class="urgent-chevron">▾</span>
+        </button>
+        <div class="urgent-list" id="urgentList" hidden>
+          <!-- filled in by JS -->
+        </div>
+      </div>
+
+    <main id="top">
+      <section class="saved-section wrap">
+        <div class="section-head">
+          <h2 data-i18n="savedTitle">Saved resources</h2>
+          <p class="section-sub" data-i18n="savedSub">Resources you've bookmarked. Saved on this device only.</p>
+        </div>
+        <div class="saved-list" id="savedList">
+          <!-- filled in by JS -->
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap footer-row">
+            <p data-i18n="footerText">Reach Community is a student-built demo project and is not affiliated with LA County or 211. In a real emergency, call 911. For any other need, 211 is free, confidential, and available 24/7.</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

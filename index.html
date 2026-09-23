@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 
 
@@ -24,7 +26,8 @@
               <nav class="header-nav">
                   <button class="nav-link-btn" id="openCheckinNavBtn" data-i18n="navCheckin">Check in</button>
                   <a href="#directory" data-i18n="navBrowse">Browse all resources</a>
-                  <a href="#saved" data-i18n="navSaved">Saved</a>
+                  <a href="saved.html" data-i18n="navSaved">Saved</a>
+                  <a href="#map" data-i18n="navMap">Map</a>
               </nav>
               
               <div class="lang-toggle" id="langToggle">
@@ -86,14 +89,17 @@
               </div>
             </section>
 
-            <section class="saved-section wrap" id="saved">
+              <section class="map-section wrap" id="map">
                 <div class="section-head">
-                  <h2 data-i18n="savedTitle">Saved resources</h2>
-                  <p class="section-sub" data-i18n="savedSub">Resources you've bookmarked. Saved on this device only.</p>
+                  <h2 data-i18n="mapTitle">Find resources near a zip code</h2>
+                  <p class="section-sub" data-i18n="mapSub">Type a zip code to center the map. Pins show real resource locations across LA County.</p>
                 </div>
-                <div class="saved-list" id="savedList">
-                  <!-- filled in by JS -->
+                <div class="map-search">
+                  <input type="text" class="search-input" id="zipInput" data-i18n-placeholder="zipPlaceholder" placeholder="Enter zip code..." inputmode="numeric" maxlength="5">
+                  <button class="btn btn-primary" id="zipSearchBtn" data-i18n="zipSearchBtn">Go</button>
                 </div>
+                <p class="map-status" id="mapStatus"></p>
+                <div id="leafletMap"></div>
               </section>
             
          </main>

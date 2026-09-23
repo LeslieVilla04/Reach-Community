@@ -691,3 +691,35 @@
   .retake-link:hover {
     color: var(--ink);
   }
+
+
+  .map-search {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    max-width: 400px;
+  }
+  
+  .map-search .search-input {
+    margin-bottom: 0;
+  }
+  
+  .map-status {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+    min-height: 18px;
+  }
+  
+  #leafletMap {
+    height: 400px;
+    width: 100%;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    margin-top: 16px;
+  }
+
+  .saved-section {
+    padding-top: 2.5rem;    /* Creates breathing room below the urgent bar */
+    padding-bottom: 4rem; /* Adds space before the footer */
+  }

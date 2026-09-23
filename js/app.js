@@ -1,5 +1,15 @@
 
 // ============================================================
+// HELPERS
+// ============================================================
+
+function on(id, event, handler) {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(event, handler);
+  }
+
+
+// ============================================================
 // TRANSLATIONS & DICTIONARIES
 // ============================================================
 
@@ -43,7 +53,14 @@ const TRANSLATIONS = {
       enterPhone: "Enter your phone number",
       send: "Send",
       back: "Back",
-      retakeCheckin: "Retake check-in"
+      retakeCheckin: "Retake check-in",
+      navMap: "Map",
+      mapTitle: "Find resources near a zip code",
+      mapSub: "Type a zip code to center the map. Pins show real resource locations across LA County.",
+      zipPlaceholder: "Enter zip code...",
+      zipSearchBtn: "Go",
+      zipNotFound: "Couldn't find that zip code. Try another.",
+      zipSearching: "Searching..."
 
     },
     es: {
@@ -85,7 +102,14 @@ const TRANSLATIONS = {
       enterPhone: "Ingresa tu número",
       send: "Enviar",
       back: "Atrás",
-      retakeCheckin: "Repetir evaluación"
+      retakeCheckin: "Repetir evaluación",
+      navMap: "Mapa",
+      mapTitle: "Encuentra recursos cerca de un código postal",
+      mapSub: "Escribe un código postal para centrar el mapa. Los marcadores muestran ubicaciones reales en el condado de LA.",
+      zipPlaceholder: "Código postal...",
+      zipSearchBtn: "Buscar",
+      zipNotFound: "No se encontró ese código postal. Intenta otro.",
+      zipSearching: "Buscando..."
     }
   };
 
@@ -112,6 +136,7 @@ const RESOURCES = [
       es: "Encuentra una despensa de alimentos gratuita cerca de ti a través de su localizador de agencias."
     },
     contact: "lafoodbank.org",
+    lat: 34.0089, lng: -118.2439,
   },
   {
     id: "r2",
@@ -122,6 +147,7 @@ const RESOURCES = [
       es: "Frutas y verduras frescas gratuitas distribuidas en centros comunitarios de Los Ángeles."
     },
     contact: "foodforward.org",
+    lat: 34.2144, lng: -118.3898,
   },
   {
     id: "r3",
@@ -132,6 +158,7 @@ const RESOURCES = [
       es: "Asistencia mensual para alimentos (programa SNAP de California). Solicita en línea o por teléfono."
     },
     contact: "1-866-613-3777 · BenefitsCal.com",
+    lat: 34.0575, lng: -118.2432,
   },
   {
     id: "r4",
@@ -142,6 +169,7 @@ const RESOURCES = [
       es: "Ayuda legal gratuita si enfrentas un desalojo, además de referencias para asistencia de alquiler y servicios."
     },
     contact: "1-800-477-5977",
+    lat: 34.0522, lng: -118.2437,
   },
   {
     id: "r5",
@@ -152,6 +180,7 @@ const RESOURCES = [
       es: "Busca viviendas de alquiler asequibles en toda la ciudad."
     },
     contact: "1-877-428-8844 · housing.lacity.org",
+    lat: 34.0500, lng: -118.2660,
   },
   {
     id: "r6",
@@ -162,6 +191,7 @@ const RESOURCES = [
       es: "Capacitación laboral gratuita, ayuda con currículum y acceso a computadoras. Sin requisito de ciudadanía. Más de 14 ubicaciones."
     },
     contact: "wdacs.lacounty.gov",
+    lat: 34.0522, lng: -118.2600,
   },
   {
     id: "r7",
@@ -172,6 +202,7 @@ const RESOURCES = [
       es: "Programa de subsidio de cuidado infantil para ayudar a cubrir los costos."
     },
     contact: "ccrcca.org",
+    lat: 34.2381, lng: -118.5960,
   },
   {
     id: "r8",
@@ -182,6 +213,7 @@ const RESOURCES = [
       es: "Referencias de cuidado infantil y asistencia financiera para familias de Westside/South Bay."
     },
     contact: "connectionsforchildren.org",
+    lat: 34.0195, lng: -118.4912,
   },
   {
     id: "r9",
@@ -192,6 +224,7 @@ const RESOURCES = [
       es: "Tarifas según los ingresos del paciente. Se aceptan personas sin seguro médico."
     },
     contact: "1-888-499-9303",
+    lat: 34.0067, lng: -118.1531,
   },
   {
     id: "r10",
@@ -202,6 +235,7 @@ const RESOURCES = [
       es: "Clínicas de salud de bajo costo abiertas a la comunidad, independientemente del estado del seguro."
     },
     contact: "aplahealth.org",
+    lat: 34.0614, lng: -118.3009,
   },
   {
     id: "r11",
@@ -212,6 +246,7 @@ const RESOURCES = [
       es: "Pases de tránsito gratuitos o con gran descuento para personas de bajos ingresos en el condado de LA."
     },
     contact: "1-866-827-8646 · metro.net/life",
+    lat: 34.0562, lng: -118.2364,
   },
   {
     id: "r12",
@@ -222,6 +257,7 @@ const RESOURCES = [
       es: "Ayuda legal gratuita para residentes de bajos ingresos — vivienda, inmigración, derecho familiar y más."
     },
     contact: "1-800-399-4529 · lafla.org",
+    lat: 34.0508, lng: -118.2685,
   },
   {
     id: "r13",
@@ -232,6 +268,7 @@ const RESOURCES = [
       es: "Asistencia legal gratuita para defensa en desalojos, beneficios públicos y disputas laborales."
     },
     contact: "nlsla.org",
+    lat: 34.2606, lng: -118.4090,
   },
   {
     id: "r14",
@@ -242,6 +279,7 @@ const RESOURCES = [
       es: "Ayuda a pagar facturas de energía atrasadas o actuales para hogares elegibles por ingresos."
     },
     contact: "1-866-675-6623",
+    lat: 34.0575, lng: -118.2432,
   },
 ];
 
@@ -320,6 +358,7 @@ function telHref(contact) {
 
   function renderUrgentList() {
     const listEl = document.getElementById("urgentList");
+    if (!listEl) return;
     listEl.innerHTML = URGENT_RESOURCES.map(r => `
       <div class="urgent-item">
         <span class="urgent-name">${r.name}</span>
@@ -411,6 +450,7 @@ let searchTerm = "";
 
 function renderQuestion() {
     const card = document.getElementById("checkinCard");
+    if (!card) return;
     const indicator = document.getElementById("stepIndicator");
   
     if (currentQuestion >= QUESTIONS.length) {
@@ -479,6 +519,7 @@ function setLanguage(lang) {
     renderDirectoryList();
     renderUrgentList();
     renderSavedList();
+    renderMapMarkers();
   
     if (currentQuestion >= QUESTIONS.length) {
       updateResultsView();
@@ -559,7 +600,7 @@ let activeFilter = "all";
 
 function renderDirectoryFilters() {
     const filtersEl = document.getElementById("directoryFilters");
-  
+    if (!filtersEl) return;
     const allCategories = ["all", ...Object.keys(CATEGORIES)];
   
     filtersEl.innerHTML = allCategories.map(cat => {
@@ -582,7 +623,7 @@ function renderDirectoryFilters() {
 
   function renderDirectoryList() {
     const listEl = document.getElementById("directoryList");
-  
+    if (!listEl) return;
     let visible = activeFilter === "all"
       ? RESOURCES
       : RESOURCES.filter(r => r.category === activeFilter);
@@ -599,15 +640,12 @@ function renderDirectoryFilters() {
       ? visible.map(resourceCardHTML).join("")
       : `<p class="no-results">${TRANSLATIONS[currentLang].noResults}</p>`;
 
-      listEl.innerHTML = visible.length > 0
-      ? visible.map(resourceCardHTML).join("")
-      : `<p class="no-results">${TRANSLATIONS[currentLang].noResults}</p>`;
-
       bindSaveButtons(listEl);
   }
 
   function renderSavedList() {
     const listEl = document.getElementById("savedList");
+    if (!listEl) return;
     const saved = RESOURCES.filter(r => savedIds.includes(r.id));
   
     listEl.innerHTML = saved.length > 0
@@ -683,6 +721,74 @@ function showShareBubble() {
       step.hidden = step.id !== stepId;
     });
   }
+
+  // ============================================================
+// MAP
+// ============================================================
+
+let leafletMap = null;
+let mapMarkers = [];
+
+function initMap() {
+  leafletMap = L.map("leafletMap").setView([34.0522, -118.2437], 10); // centered on LA
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap contributors",
+    maxZoom: 18,
+  }).addTo(leafletMap);
+
+  renderMapMarkers();
+}
+
+function renderMapMarkers() {
+  if (!leafletMap) return;
+  mapMarkers.forEach(marker => leafletMap.removeLayer(marker));
+  mapMarkers = [];
+
+  RESOURCES.forEach(resource => {
+    if (resource.lat == null || resource.lng == null) return;
+
+    const marker = L.marker([resource.lat, resource.lng]).addTo(leafletMap);
+    const categoryLabel = CATEGORIES[resource.category].label[currentLang];
+    marker.bindPopup(`
+      <strong>${resource.name}</strong><br>
+      <span style="color:#5C6B63; font-size:13px;">${categoryLabel}</span><br>
+      <span style="font-size:13px;">${resource.description[currentLang]}</span><br>
+      <strong style="font-size:13px;">${resource.contact}</strong>
+    `);
+    mapMarkers.push(marker);
+  });
+}
+
+async function searchZip() {
+    const zipInput = document.getElementById("zipInput");
+    const statusEl = document.getElementById("mapStatus");
+    const zip = zipInput.value.trim();
+  
+    if (zip === "") return;
+  
+    statusEl.textContent = TRANSLATIONS[currentLang].zipSearching;
+  
+    try {
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(zip)}&countrycodes=us&format=json&limit=1&viewbox=-118.9448,34.8233,-117.6462,33.7037&bounded=1`
+          );
+      const results = await response.json();
+  
+      if (results.length === 0) {
+        statusEl.textContent = TRANSLATIONS[currentLang].zipNotFound;
+        return;
+      }
+  
+      const lat = parseFloat(results[0].lat);
+      const lng = parseFloat(results[0].lon);
+      leafletMap.setView([lat, lng], 12);
+      statusEl.textContent = "";
+    } catch (error) {
+      statusEl.textContent = TRANSLATIONS[currentLang].zipNotFound;
+    }
+  }
+
 // ============================================================
 // INIT
 // ============================================================
@@ -704,34 +810,24 @@ function init() {
     renderUrgentList();
     renderSavedList();
   
-    document.getElementById("openCheckinBtn").addEventListener("click", openCheckin);
-    document.getElementById("openCheckinNavBtn").addEventListener("click", openCheckin);
-    document.getElementById("checkinClose").addEventListener("click", closeCheckin);
-    document.getElementById("checkinScrim").addEventListener("click", closeCheckin);
-    document.getElementById("urgentToggle").addEventListener("click", toggleUrgent);
-    document.getElementById("searchInput").addEventListener("input", (e) => {
-        searchTerm = e.target.value;
-        renderDirectoryList();
-      });
+    on("openCheckinBtn", "click", openCheckin);
+    on("openCheckinNavBtn", "click", openCheckin);
+    on("checkinClose", "click", closeCheckin);
+    on("checkinScrim", "click", closeCheckin);
+    on("urgentToggle", "click", toggleUrgent);
+    on("searchInput", "input", (e) => {
+      searchTerm = e.target.value;
+      renderDirectoryList();
+    });
 
     // Share bubble
-    document.getElementById("bubbleNoBtn").addEventListener("click", hideShareBubble);
+    on("bubbleNoBtn", "click", hideShareBubble);
+    on("bubbleChooseEmail", "click", () => showBubbleStep("bubbleStepEmail"));
+    on("bubbleChooseText", "click", () => showBubbleStep("bubbleStepText"));
+    on("bubbleBackFromEmail", "click", () => showBubbleStep("bubbleStepChoice"));
+    on("bubbleBackFromText", "click", () => showBubbleStep("bubbleStepChoice"));
 
-    document.getElementById("bubbleChooseEmail").addEventListener("click", () => {
-      showBubbleStep("bubbleStepEmail");
-    });
-    document.getElementById("bubbleChooseText").addEventListener("click", () => {
-      showBubbleStep("bubbleStepText");
-    });
-
-    document.getElementById("bubbleBackFromEmail").addEventListener("click", () => {
-      showBubbleStep("bubbleStepChoice");
-    });
-    document.getElementById("bubbleBackFromText").addEventListener("click", () => {
-      showBubbleStep("bubbleStepChoice");
-    });
-
-    document.getElementById("bubbleSendEmail").addEventListener("click", () => {
+    on("bubbleSendEmail", "click", () => {
       const email = document.getElementById("bubbleEmailInput").value.trim();
       if (email === "") return;
       const matches = RESOURCES.filter(r => neededCategories.includes(r.category));
@@ -739,7 +835,7 @@ function init() {
       hideShareBubble();
     });
 
-    document.getElementById("bubbleSendText").addEventListener("click", () => {
+    on("bubbleSendText", "click", () => {
       const phone = document.getElementById("bubblePhoneInput").value.trim();
       if (phone === "") return;
       const digits = phone.replace(/[^\d]/g, "");
@@ -747,8 +843,16 @@ function init() {
       window.location.href = `sms:${digits}?&body=${encodeURIComponent(buildShareBody(matches))}`;
       hideShareBubble();
     });
-  }
 
+    if (document.getElementById("leafletMap")) {
+      initMap();
+    }
+
+    on("zipSearchBtn", "click", searchZip);
+    on("zipInput", "keydown", (e) => {
+      if (e.key === "Enter") searchZip();
+    });
+  }
 
 
 document.addEventListener("DOMContentLoaded", init);

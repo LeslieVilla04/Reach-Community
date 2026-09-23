@@ -161,6 +161,7 @@
   .step-indicator {
     font-size: 13px;
     color: var(--ink-soft);
+    margin-bottom: 18px;
   }
   
   .section-sub {
@@ -290,26 +291,27 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: var(--bg);
-    border-radius: var(--radius);
-    padding: 28px;
+    border-radius: 14px;
+    padding: 32px;
     width: 90%;
     max-width: 480px;
     max-height: 85vh;
     overflow-y: auto;
     z-index: 31;
   }
-  
+
   .modal-scrim.open,
   .modal.open {
     display: block;
   }
   
   .modal-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 4px;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+    }
+
   
   .modal-close {
     background: none;
@@ -554,4 +556,138 @@
   
   .save-btn.save-active {
     color: #C9A227;
+  }
+
+  .share-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  
+  .share-actions .btn {
+    margin-top: 0;
+  }
+
+  .share-bubble {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px 22px;
+    width: 90%;
+    max-width: 300px;
+    box-shadow: 0 12px 32px rgba(29, 43, 39, 0.2);
+    z-index: 35;
+    opacity: 0;
+  }
+  
+  .share-bubble.bubble-in {
+    animation: bubbleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  
+  .share-bubble.bubble-out {
+    animation: bubbleOut 0.25s ease-in forwards;
+  }
+  
+  @keyframes bubbleIn {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+  
+  @keyframes bubbleOut {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    60% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  }
+  
+  .share-bubble-text {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .share-bubble-actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .bubble-btn {
+    flex: 1;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  
+  .bubble-btn-yes {
+    background: var(--primary);
+    color: #fff;
+  }
+  
+  .bubble-btn-no {
+    background: var(--bg);
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+  }
+
+  .bubble-step[hidden] {
+    display: none;
+  }
+  
+  .bubble-dismiss {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: underline;
+  }
+  
+  .bubble-input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 12px;
+  }
+  
+  .bubble-input:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+
+  .checkin-done {
+    margin-bottom: 10px;
+  }
+  
+  .retake-link {
+    display: block;
+    background: none;
+    border: none;
+    color: var(--urgent);
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0;
+    transition: color 0.2s ease;
+  }
+  
+  .retake-link:hover {
+    color: var(--ink);
   }

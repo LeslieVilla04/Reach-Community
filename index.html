@@ -118,6 +118,37 @@
         </div>
     </div>
 
+    <div class="share-bubble" id="shareBubble" hidden>
+
+        <div class="bubble-step" id="bubbleStepChoice">
+          <p class="share-bubble-text" data-i18n="shareBubbleText">Want this sent to you?</p>
+          <div class="share-bubble-actions">
+            <button class="bubble-btn bubble-btn-yes" id="bubbleChooseEmail" data-i18n="emailOption">Email</button>
+            <button class="bubble-btn bubble-btn-yes" id="bubbleChooseText" data-i18n="textOption">Text</button>
+          </div>
+          <button class="bubble-dismiss" id="bubbleNoBtn" data-i18n="noThanks">No thanks</button>
+        </div>
+      
+        <div class="bubble-step" id="bubbleStepEmail" hidden>
+          <p class="share-bubble-text" data-i18n="enterEmail">Enter your email</p>
+          <input type="email" class="bubble-input" id="bubbleEmailInput" placeholder="you@example.com">
+          <div class="share-bubble-actions">
+            <button class="bubble-btn bubble-btn-yes" id="bubbleSendEmail" data-i18n="send">Send</button>
+            <button class="bubble-btn bubble-btn-no" id="bubbleBackFromEmail" data-i18n="back">Back</button>
+          </div>
+        </div>
+      
+        <div class="bubble-step" id="bubbleStepText" hidden>
+          <p class="share-bubble-text" data-i18n="enterPhone">Enter your phone number</p>
+          <input type="tel" class="bubble-input" id="bubblePhoneInput" placeholder="(555) 555-5555">
+          <div class="share-bubble-actions">
+            <button class="bubble-btn bubble-btn-yes" id="bubbleSendText" data-i18n="send">Send</button>
+            <button class="bubble-btn bubble-btn-no" id="bubbleBackFromText" data-i18n="back">Back</button>
+          </div>
+        </div>
+      
+      </div>
+
 
 
     <script src="js/app.js"></script>

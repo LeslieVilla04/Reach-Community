@@ -30,7 +30,20 @@ const TRANSLATIONS = {
       navSaved: "Saved",
       savedTitle: "Saved resources",
       savedSub: "Resources you've bookmarked. Saved on this device only.",
-      savedEmpty: "You haven't saved anything yet. Tap the star on any resource to save it here."
+      savedEmpty: "You haven't saved anything yet. Tap the star on any resource to save it here.",
+      textList: "Text this list to me",
+      emailList: "Email this list to me",
+      emailSubject: "Resources from Reach Community",
+      shareIntro: "Here are the resources I found on Reach Community:",
+      shareBubbleText: "Want this sent to you?",
+      noThanks: "No thanks",
+      emailOption: "Email",
+      textOption: "Text",
+      enterEmail: "Enter your email",
+      enterPhone: "Enter your phone number",
+      send: "Send",
+      back: "Back",
+      retakeCheckin: "Retake check-in"
 
     },
     es: {
@@ -59,8 +72,20 @@ const TRANSLATIONS = {
       navSaved: "Guardados",
       savedTitle: "Recursos guardados",
       savedSub: "Recursos que has guardado. Solo se guardan en este dispositivo.",
-      savedEmpty: "Aún no has guardado nada. Toca la estrella en cualquier recurso para guardarlo aquí."
-
+      savedEmpty: "Aún no has guardado nada. Toca la estrella en cualquier recurso para guardarlo aquí.",
+      textList: "Enviarme la lista por texto",
+      emailList: "Enviarme la lista por correo",
+      emailSubject: "Recursos de Reach Community",
+      shareIntro: "Aquí están los recursos que encontré en Reach Community:",
+      shareBubbleText: "¿Quieres que te lo enviemos?",
+      noThanks: "No, gracias",
+      emailOption: "Correo",
+      textOption: "Texto",
+      enterEmail: "Ingresa tu correo",
+      enterPhone: "Ingresa tu número",
+      send: "Enviar",
+      back: "Atrás",
+      retakeCheckin: "Repetir evaluación"
     }
   };
 
@@ -497,10 +522,20 @@ function resourceCardHTML(resource) {
     document.getElementById("resultsList").innerHTML = matches.map(resourceCardHTML).join("");
     bindSaveButtons(document.getElementById("resultsList"));
   }
+
+  function retakeCheckin() {
+    currentQuestion = 0;
+    neededCategories = [];
+    renderQuestion();
+  }
   
   function showResults() {
     const strings = TRANSLATIONS[currentLang];
-    document.getElementById("checkinCard").innerHTML = `<p class="checkin-done">${strings.checkinDone}</p>`;
+    document.getElementById("checkinCard").innerHTML = `
+      <p class="checkin-done">${strings.checkinDone}</p>
+      <button class="retake-link" id="retakeBtn">${strings.retakeCheckin}</button>
+    `;
+    document.getElementById("retakeBtn").addEventListener("click", retakeCheckin);
     document.getElementById("stepIndicator").style.display = "none";
   
     updateResultsView();
@@ -509,6 +544,10 @@ function resourceCardHTML(resource) {
     resultsSection.hidden = false;
     resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
     closeCheckin();
+
+  if (neededCategories.length > 0) {
+    showShareBubble();
+  }
   }
 
 
@@ -594,7 +633,56 @@ function openCheckin() {
     document.getElementById("checkinScrim").classList.remove("open");
   }
 
+  // ============================================================
+// SHARE (text / email)
+// ============================================================
 
+function buildShareBody(resources) {
+    const strings = TRANSLATIONS[currentLang];
+    const lines = resources.map(r => {
+      const desc = r.description[currentLang];
+      return `${r.name}\n${desc}\n${r.contact}`;
+    });
+    return `${strings.shareIntro}\n\n${lines.join("\n\n")}`;
+  }
+  
+  function shareViaText(resources) {
+    const body = buildShareBody(resources);
+    window.location.href = `sms:?&body=${encodeURIComponent(body)}`;
+  }
+  
+  function shareViaEmail(resources) {
+    const strings = TRANSLATIONS[currentLang];
+    const body = buildShareBody(resources);
+    window.location.href = `mailto:?subject=${encodeURIComponent(strings.emailSubject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  // ============================================================
+// SHARE BUBBLE
+// ============================================================
+
+function showShareBubble() {
+    const bubble = document.getElementById("shareBubble");
+    bubble.hidden = false;
+    bubble.classList.remove("bubble-out");
+    bubble.classList.add("bubble-in");
+  }
+  
+  function hideShareBubble() {
+    const bubble = document.getElementById("shareBubble");
+    bubble.classList.remove("bubble-in");
+    bubble.classList.add("bubble-out");
+    bubble.addEventListener("animationend", () => {
+      bubble.hidden = true;
+      bubble.classList.remove("bubble-out");
+    }, { once: true });
+  }
+
+  function showBubbleStep(stepId) {
+    document.querySelectorAll(".bubble-step").forEach(step => {
+      step.hidden = step.id !== stepId;
+    });
+  }
 // ============================================================
 // INIT
 // ============================================================
@@ -621,12 +709,44 @@ function init() {
     document.getElementById("checkinClose").addEventListener("click", closeCheckin);
     document.getElementById("checkinScrim").addEventListener("click", closeCheckin);
     document.getElementById("urgentToggle").addEventListener("click", toggleUrgent);
-
     document.getElementById("searchInput").addEventListener("input", (e) => {
         searchTerm = e.target.value;
         renderDirectoryList();
       });
-    
+
+    // Share bubble
+    document.getElementById("bubbleNoBtn").addEventListener("click", hideShareBubble);
+
+    document.getElementById("bubbleChooseEmail").addEventListener("click", () => {
+      showBubbleStep("bubbleStepEmail");
+    });
+    document.getElementById("bubbleChooseText").addEventListener("click", () => {
+      showBubbleStep("bubbleStepText");
+    });
+
+    document.getElementById("bubbleBackFromEmail").addEventListener("click", () => {
+      showBubbleStep("bubbleStepChoice");
+    });
+    document.getElementById("bubbleBackFromText").addEventListener("click", () => {
+      showBubbleStep("bubbleStepChoice");
+    });
+
+    document.getElementById("bubbleSendEmail").addEventListener("click", () => {
+      const email = document.getElementById("bubbleEmailInput").value.trim();
+      if (email === "") return;
+      const matches = RESOURCES.filter(r => neededCategories.includes(r.category));
+      window.location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(TRANSLATIONS[currentLang].emailSubject)}&body=${encodeURIComponent(buildShareBody(matches))}`;
+      hideShareBubble();
+    });
+
+    document.getElementById("bubbleSendText").addEventListener("click", () => {
+      const phone = document.getElementById("bubblePhoneInput").value.trim();
+      if (phone === "") return;
+      const digits = phone.replace(/[^\d]/g, "");
+      const matches = RESOURCES.filter(r => neededCategories.includes(r.category));
+      window.location.href = `sms:${digits}?&body=${encodeURIComponent(buildShareBody(matches))}`;
+      hideShareBubble();
+    });
   }
 
 
